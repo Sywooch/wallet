@@ -4,6 +4,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use yii\helpers\ArrayHelper;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -32,19 +33,21 @@ AppAsset::register($this);
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
+            $userBarNav = Yii::$app->user->isGuest ? [['label' => 'Login', 'url' => ['/user/default/login']], ['label' => 'Sign up', 'url' => ['/user/default/signup']]] :
+                        [['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                            'url' => ['/user/default/logout'],
+                            'linkOptions' => ['data-method' => 'post']]
+                        ];
+
+            $userActionsBar = [['label' => 'Tags', 'url' => ['/tags/index']]];
+
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Tags', 'url' => ['tags']],
-                    ['label' => 'About', 'url' => ['/site/about']],
+                'items' => ArrayHelper::merge([['label' => 'Home', 'url' => ['/site/index']]],
+                    $userActionsBar,
+                    [['label' => 'About', 'url' => ['/site/about']],
                     ['label' => 'Contact', 'url' => ['/site/contact']],
-                    Yii::$app->user->isGuest ?
-                        ['label' => 'Login', 'url' => ['user/default/login']] :
-                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                            'url' => ['user/default/logout'],
-                            'linkOptions' => ['data-method' => 'post']],
-                ],
+                ], $userBarNav),
             ]);
             NavBar::end();
         ?>

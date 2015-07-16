@@ -1,14 +1,38 @@
 <?php
+
+use yii\helpers\Html;
+use yii\grid\GridView;
+
 /* @var $this yii\web\View */
-$this->title = 'My Wallet - Tags';
+/* @var $searchModel app\modules\tag\models\TagSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = Yii::t('tag', 'Tags');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-index">
+<div class="tag-index">
 
-    <div class="jumbotron">
-        <h1>Tags</h1>
-    </div>
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <div class="body-content">
+    <p>
+        <?= Html::a(Yii::t('tag', 'Create {modelClass}', [
+    'modelClass' => 'Tag',
+]), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
-    </div>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'name',
+            'type',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
 </div>

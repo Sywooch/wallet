@@ -39,15 +39,22 @@ AppAsset::register($this);
                             'linkOptions' => ['data-method' => 'post']]
                         ];
 
-            $userActionsBar = Yii::$app->user->isGuest ? [] : [['label' => 'Tags', 'url' => ['/tags/index']]];
+            $userActionsBar = Yii::$app->user->isGuest ? [] : [
+                                                                        ['label' => 'Accounts', 'url' => ['/accounts/index']],
+                                                                        ['label' => 'Tags', 'url' => ['/tags/index']],
+                                                              ];
 
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => ArrayHelper::merge([['label' => 'Home', 'url' => ['/site/index']]],
+                'items' => ArrayHelper::merge(
+                    [['label' => 'Home', 'url' => ['/site/index']]],
                     $userActionsBar,
-                    [['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
-                ], $userBarNav),
+                    [
+                        ['label' => 'About', 'url' => ['/site/about']],
+                        ['label' => 'Contact', 'url' => ['/site/contact']],
+                    ],
+                    $userBarNav
+                ),
             ]);
             NavBar::end();
         ?>

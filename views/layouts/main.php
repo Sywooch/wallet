@@ -39,7 +39,7 @@ AppAsset::register($this);
                             'linkOptions' => ['data-method' => 'post']]
                         ];
 
-            $userActionsBar = [['label' => 'Tags', 'url' => ['/tags/index']]];
+            $userActionsBar = Yii::$app->user->isGuest ? [] : [['label' => 'Tags', 'url' => ['/tags/index']]];
 
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],

@@ -2,8 +2,8 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=wallet',
+    'dsn' => 'mysql:host=letris.ru;dbname=wallet',
     'username' => 'wallet',
-    'password' => 'wallet',
+    'password' => 'shadiewalletpass',
     'charset' => 'utf8',
 ];

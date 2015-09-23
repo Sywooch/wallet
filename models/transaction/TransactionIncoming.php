@@ -21,6 +21,10 @@ use Yii;
  */
 class TransactionIncoming extends \yii\db\ActiveRecord
 {
+    public function __construct() {
+        $this->id = 'NEWID';
+        parent::__construct();
+    }
     /**
      * @inheritdoc
      */

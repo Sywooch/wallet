@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a(Yii::t('contractor', 'Create more'), ['create'], ['class' => 'btn']) ?>
     </p>
 
     <?= DetailView::widget([

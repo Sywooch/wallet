@@ -83,17 +83,23 @@ use yii\widgets\ActiveForm;
 
 <script type="text/javascript">
 $(function() {
-    $('[role="add-incoming"]').click(function() {
+    $('[role="add-incoming"]').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         var div = $('[role="transaction-details-add"] [role="new-incoming"]').clone();
         div.removeAttr('role');
         div.appendTo('[role="transaction-details"] [role="transaction-details-incoming"]');
     });
-    $('[role="add-outgoing"]').click(function() {
+    $('[role="add-outgoing"]').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         var div = $('[role="transaction-details-add"] [role="new-outgoing"]').clone();
         div.removeAttr('role');
         div.appendTo('[role="transaction-details"] [role="transaction-details-outgoing"]');
     });
-    $('[role="add-expense"]').click(function() {
+    $('[role="add-expense"]').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         var div = $('[role="transaction-details-add"] [role="new-expense"]').clone();
         div.removeAttr('role');
         div.appendTo('[role="transaction-details"] [role="transaction-details-expense"]');

@@ -83,6 +83,9 @@ use yii\widgets\ActiveForm;
 
 <script type="text/javascript">
 $(function() {
+    var generateNewId = function(type) {
+        
+    }
     $('[role="add-incoming"]').click(function(e) {
         e.preventDefault();
         e.stopPropagation();

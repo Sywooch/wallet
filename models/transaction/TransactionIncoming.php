@@ -21,8 +21,12 @@ use Yii;
  */
 class TransactionIncoming extends \yii\db\ActiveRecord
 {
+    public function formName() {
+        return "Transaction[incoming][" . $this->id . "]";
+    }
+    
     public function __construct() {
-        $this->id = 'NEWID';
+        $this->id = '%%newid%%';
         parent::__construct();
     }
     /**

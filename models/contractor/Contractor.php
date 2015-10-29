@@ -25,7 +25,7 @@ class Contractor extends \yii\db\ActiveRecord
     }
 
     public static function dropdown($userId) {
-        $items = static::find()->where(['user_id' => $userId])->orderBy(['name' => SORT_DESC])->all();
+        $items = static::find()->where(['user_id' => $userId])->orderBy(['name' => SORT_ASC])->all();
         $result = [];
         foreach ($items as $item) {
             $result[$item->id] = $item->name;

@@ -94,7 +94,8 @@ class Account extends \yii\db\ActiveRecord
     }
 
     public static function plainHierarcyForUser($userId, $types = null) {
-        $result = array_map(function($item) {return str_pad("", $item->level, "-") . ' ' . $item->title;}, self::hierarcyForUser($userId, $types));
+        $result = [0 => "-"];
+        $result += array_map(function($item) {return str_pad("", $item->level, "-") . ' ' . $item->title;}, self::hierarcyForUser($userId, $types));
         return $result;
     }
 

@@ -21,6 +21,10 @@ use Yii;
  */
 class TransactionOutgoing extends \yii\db\ActiveRecord
 {
+    public function formName() {
+        return "Transaction[outgoing][" . $this->id . "]";
+    }
+    
     /**
      * @inheritdoc
      */
@@ -35,7 +39,7 @@ class TransactionOutgoing extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['account_id', 'transaction_id', 'sum', 'comment', 'user_id'], 'required'],
+            [['account_id', 'transaction_id', 'sum', 'user_id'], 'required'],
             [['account_id', 'transaction_id', 'user_id'], 'integer'],
             [['sum'], 'number'],
             [['comment'], 'string']

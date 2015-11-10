@@ -39,12 +39,12 @@ class TagsController extends Controller {
 
     public function actionIndex()
     {
-        $searchModel = new TagSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $models = Tag::hierarcyForUser(Yii::$app->user->getId());
+//        $searchModel = new TagSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//ddump($models);
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'models' => $models,
         ]);
     }
 
@@ -68,6 +68,9 @@ class TagsController extends Controller {
     public function actionCreate()
     {
         $model = new Tag();
+        
+        $model->scenario = 'insert';
+        
         $model->create(Yii::$app->request->post(), Yii::$app->user->getId());
 
         if ($model->save()) {

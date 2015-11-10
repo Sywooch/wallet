@@ -103,6 +103,15 @@ class Account extends \yii\db\ActiveRecord
         $this->user_id = Yii::$app->user->getId();
         return parent::beforeSave($insert);
     }
+    
+    /**
+     * 
+     * @param string $name
+     * @return Account
+     */
+    public static function getByName($name) {
+        return self::findOne(['title' => $name]);
+    }
 
     /**
      * @inheritdoc

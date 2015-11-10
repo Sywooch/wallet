@@ -20,11 +20,14 @@ class ExpenseController extends Controller
                 continue;
             }
             if ($arr[0]) {
+//                var_dump($arr[1], $arr[8], \app\models\account\Account::getByName($arr[8]));
                 $expenses[] = [
                     'date' => $arr[0],
                     'contractor' => $arr[1],
+                    'contractor_id' => \app\models\contractor\Contractor::getByName($arr[1])->id,
                     'bonus' => $arr[7],
                     'account' => $arr[8],
+                    'account_id' => \app\models\account\Account::getByName($arr[8])->id,
                     'expenses' => [[
                         'title' => $arr[2],
                         'price' => $arr[3],
@@ -45,6 +48,40 @@ class ExpenseController extends Controller
                 ];
             }
         }
-        var_dump($expenses);
+        
+        
+        foreach ($expenses as $expense) {
+            $transfer = new \app\models\transaction\Transaction();
+            $transfer->comment = "";
+            preg_match('!^(\d{1,2})[\.\-](\d{1,2}) (\d{1,2})-(\d{2})$!', $expense['date'], $m);
+            $transfer->date = date('Y-m-d H:i:s', strtotime("$m[1].$m[2].2015 $m[3]:$m[4]:00"));
+            var_dump($transfer->date);
+            $transfer->user_id = 2;
+            $transfer->comment = $expense['expenses'][0]['comment'];
+            $transfer->save(false);
+            
+            $exps = [];
+            $total = 0;
+            foreach ($expense['expenses'] as $e) {
+                $exp = new \app\models\transaction\TransactionExpense();
+                $exp->name = $e['title'];
+                $exp->price = $e['price'];
+                $exp->qty = $e['count'];
+                $exp->sum = $exp->price * $exp->qty;
+                $exp->comment = $e['comment'];
+                $exp->contractor_id = $expense['contractor_id'];
+                $exp->user_id = 2;
+                $total+= $exp->sum;
+                $exp->transaction_id = $transfer->id;
+                $exp->save(false);
+            }
+            
+            $out = new \app\models\transaction\TransactionOutgoing();
+            $out->account_id = $expense['account_id'];
+            $out->sum = $total;
+            $out->user_id = 2;
+            $out->transaction_id = $transfer->id;
+            $out->save(false);
+        }
     }
 }

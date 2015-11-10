@@ -58,6 +58,15 @@ class Contractor extends \yii\db\ActiveRecord
             'user_id' => Yii::t('contractor', 'User ID'),
         ];
     }
+    
+    /**
+     * 
+     * @param string $name
+     * @return Contractor
+     */
+    public static function getByName($name) {
+        return self::findOne(['name' => $name]);
+    }
 
     /**
      * @return \yii\db\ActiveQuery

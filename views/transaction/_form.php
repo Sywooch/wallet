@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use yii\helpers\ArrayHelper;
+use app\models\contractor\Contractor;
 /* @var $this yii\web\View */
 /* @var $model app\models\transaction\Transaction */
 /* @var $form yii\widgets\ActiveForm */
@@ -17,6 +18,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'expenseContractorId')->dropDownList(ArrayHelper::merge(["" => "Select contractor"], Contractor::dropdown(Yii::$app->user->getId()))) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -31,29 +33,29 @@ use yii\widgets\ActiveForm;
     <div role="transaction-details">
         <div role="transaction-details-incoming">
             <h3>Incoming</h3>
+            <ol>
             <?php foreach ($model->transactionIncomings as $__ITEM) : ?>
-            <div>
                 <?php include (__DIR__ . "/__incoming.php"); ?>
-            </div>
             <?php endforeach; ?>
+            </ol>
         </div>
 
         <div role="transaction-details-outgoing">
             <h3>Outgoing</h3>
+            <ol>
             <?php foreach ($model->transactionOutgoings as $__ITEM) : ?>
-            <div>
                 <?php include (__DIR__ . "/__outgoing.php"); ?>
-            </div>
             <?php endforeach; ?>
+            </ol>
         </div>
 
         <div role="transaction-details-expense">
             <h3>Expense</h3>
+            <ol>
             <?php foreach ($model->transactionExpenses as $__ITEM) : ?>
-            <div>
                 <?php include (__DIR__ . "/__expense.php"); ?>
-            </div>
             <?php endforeach; ?>
+            </ol>
         </div>
     </div>
     <?php ActiveForm::end(); ?>
@@ -106,6 +108,12 @@ $(function() {
         var div = $('[role="transaction-details-add"] [role="new-expense"]').clone();
         div.removeAttr('role');
         div.appendTo('[role="transaction-details"] [role="transaction-details-expense"]');
+    });
+    $('select[name="Transaction[expenceContractorId]"]').change(function () {
+        var val = $(this).val();
+        $('select[role="expense-contractor"]').each(function() {
+            $(this).val(val);
+        });
     });
 })
 </script>

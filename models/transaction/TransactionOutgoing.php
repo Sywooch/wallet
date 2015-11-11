@@ -3,7 +3,7 @@
 namespace app\models\transaction;
 
 use Yii;
-
+use app\models\account\Account;
 /**
  * This is the model class for table "transaction_outgoing".
  *

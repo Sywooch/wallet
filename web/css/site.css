@@ -89,3 +89,14 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+/* Other */
+.outSum {
+    color: red;
+    font-style: italic;
+}
+
+.inSum {
+    color: green;
+    font-style: italic;
+}

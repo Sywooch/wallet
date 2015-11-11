@@ -64,8 +64,8 @@ class Contractor extends \yii\db\ActiveRecord
      * @param string $name
      * @return Contractor
      */
-    public static function getByName($name) {
-        return self::findOne(['name' => $name]);
+    public static function getByName($name, $userId) {
+        return self::findOne(['name' => $name, 'user_id' => $userId]);
     }
 
     /**

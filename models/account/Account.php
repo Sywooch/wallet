@@ -94,8 +94,7 @@ class Account extends \yii\db\ActiveRecord
     }
 
     public static function plainHierarcyForUser($userId, $types = null) {
-        $result = [0 => "-"];
-        $result += array_map(function($item) {return str_pad("", $item->level, "-") . ' ' . $item->title;}, self::hierarcyForUser($userId, $types));
+        $result = array_map(function($item) {return str_pad("", $item->level, "-") . ' ' . $item->title;}, self::hierarcyForUser($userId, $types));
         return $result;
     }
 
@@ -104,13 +103,17 @@ class Account extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
     
+    public function renderFinance($sum) {
+        return sprintf($this->currency->format, $sum);
+    }
+    
     /**
      * 
      * @param string $name
      * @return Account
      */
-    public static function getByName($name) {
-        return self::findOne(['title' => $name]);
+    public static function getByName($name, $userId) {
+        return self::findOne(['title' => $name, 'user_id' => $userId]);
     }
 
     /**

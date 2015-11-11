@@ -19,7 +19,36 @@ use Yii;
  */
 class Transaction extends \yii\db\ActiveRecord
 {
-    /**
+    public $expenseContractorId = null;
+
+    public function afterFind() {
+        parent::afterFind();
+        $contractors = [];
+        
+        foreach ($this->transactionExpenses as $transactionExpense) {
+            if (isset($contractors[$transactionExpense->contractor_id])) {
+                $contractors[$transactionExpense->contractor_id]++;
+            } else {
+                $contractors[$transactionExpense->contractor_id] = 1;
+            }
+        }
+        if (!$contractors) {
+            return;
+        }
+        $keys = array_keys($contractors, max($contractors));
+        $this->expenseContractorId = array_shift($keys);
+    }
+    
+    public function getAllContractorNames() {
+        $contractors = [];
+        foreach ($this->transactionExpenses as $expense) {
+            $contractors[$expense->contractor->id] = $expense->contractor->name;
+        }
+        return join(", ", $contractors);
+    }
+
+    
+        /**
      * @inheritdoc
      */
     public static function tableName()
@@ -33,7 +62,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date', 'comment', 'user_id'], 'required'],
+            [['date', 'user_id'], 'required'],
             [['date'], 'safe'],
             [['comment'], 'string'],
             [['user_id'], 'integer']

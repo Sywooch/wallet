@@ -17,18 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Transaction', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'date',
-            'comment:ntext',
-            'user_id',
-
+            ['class' => 'app\widgets\grid\TransactionDescriptionColumn'],
+            ['class' => 'app\widgets\grid\TransactionExpensesColumn'],
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    ?>
 
 </div>

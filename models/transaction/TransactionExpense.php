@@ -3,7 +3,7 @@
 namespace app\models\transaction;
 
 use Yii;
-
+use app\models\contractor\Contractor;
 /**
  * This is the model class for table "transaction_expense".
  *
@@ -14,6 +14,7 @@ use Yii;
  * @property string $price
  * @property string $qty
  * @property string $sum
+ * @property double $discount
  * @property string $comment
  * @property integer $user_id
  *
@@ -24,6 +25,9 @@ use Yii;
  */
 class TransactionExpense extends \yii\db\ActiveRecord
 {
+    public function formName() {
+        return "Transaction[expense][" . $this->id . "]";
+    }
     /**
      * @inheritdoc
      */
@@ -40,7 +44,7 @@ class TransactionExpense extends \yii\db\ActiveRecord
         return [
             [['name', 'contractor_id', 'transaction_id', 'price', 'qty', 'sum', 'comment', 'user_id'], 'required'],
             [['contractor_id', 'transaction_id', 'user_id'], 'integer'],
-            [['price', 'qty', 'sum'], 'number'],
+            [['price', 'qty', 'sum', 'discount'], 'number'],
             [['comment'], 'string'],
             [['name'], 'string', 'max' => 255]
         ];
@@ -59,6 +63,7 @@ class TransactionExpense extends \yii\db\ActiveRecord
             'price' => 'Price',
             'qty' => 'Qty',
             'sum' => 'Sum',
+            'discount' => 'Discount',
             'comment' => 'Comment',
             'user_id' => 'User ID',
         ];

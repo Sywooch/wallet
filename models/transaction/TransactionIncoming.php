@@ -13,7 +13,8 @@ use app\models\account\Account;
  * @property string $sum
  * @property string $comment
  * @property integer $user_id
- *
+ * @property integer $contractor_id
+ * 
  * @property Account $account
  * @property Transaction $transaction
  * @property User $user
@@ -43,8 +44,8 @@ class TransactionIncoming extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['account_id', 'transaction_id', 'sum', 'comment', 'user_id'], 'required'],
-            [['account_id', 'transaction_id', 'user_id'], 'integer'],
+            [['account_id', 'transaction_id', 'sum', 'user_id'], 'required'],
+            [['account_id', 'contractor_id', 'transaction_id', 'user_id'], 'integer'],
             [['sum'], 'number'],
             [['comment'], 'string']
         ];

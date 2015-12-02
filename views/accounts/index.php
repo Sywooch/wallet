@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <thead>
             <tr>
                 <td>Name</td>
+                <td>Sum</td>
                 <td>Incoming</td>
                 <td>Outgoing</td>
                 <td>&nbsp;</td>
@@ -36,11 +37,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td style="padding-left: <?=15*$model->level;?>px">
                     <a href="<?= Url::toRoute(['/accounts/view', 'id' => $model->id]); ?>"><?= $model->title; ?></a>
                 </td>
+                <td>
+                    <?= ($model->getBalance($date)) ? $model->renderFinance($model->getBalance($date)->sum) : ""; ?>
+                    (<?= ($model->getBalance($date)) ? $model->getBalance($date)->date : ""; ?>)
+                </td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>
                     <?php if (!$model->virtual) : ?>
-                        <a href="<?= Url::toRoute(['/transfer/incoming/create', 'account' => $model->id]); ?>">Income</a>
+                        <a href="<?= Url::toRoute(['/transaction/create', 'type' => 'income', 'to' => $model->id]); ?>">Income</a>
+                        <a href="<?= Url::toRoute(['/transaction/create', 'type' => 'transfer', 'from' => $model->id]); ?>">Transfer</a>
                         Transfer
                     <?php endif; ?>
                 </td>

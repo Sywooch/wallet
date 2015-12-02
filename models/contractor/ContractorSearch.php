@@ -39,7 +39,7 @@ class ContractorSearch extends Contractor
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $userId)
     {
         $query = Contractor::find();
 
@@ -58,6 +58,8 @@ class ContractorSearch extends Contractor
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
+        
+        $query->andWhere(['user_id' => $userId]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'comment', $this->comment]);

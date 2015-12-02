@@ -32,8 +32,13 @@ class TransactionController extends Controller
      */
     public function actionIndex()
     {
+        $query = Transaction::find()->where(['user_id' => Yii::$app->user->getId()]);
+        if (isset($_GET['date'])) {
+            $dt = $_GET['date'];
+            $query->andWhere("date BETWEEN '" . $dt . " 00:00:00' AND '" . $dt . " 23:59:59'");
+        }
         $dataProvider = new ActiveDataProvider([
-            'query' => Transaction::find(),
+            'query' => $query->orderBy(['date' => SORT_DESC]),
         ]);
 
         return $this->render('index', [
@@ -58,14 +63,20 @@ class TransactionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($type)
     {
         $model = new Transaction();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model->type = $type;
+        $model->user_id = Yii::$app->user->getId();
+        $loaded = $model->load(Yii::$app->request->post());
+        
+//        ddump($loaded, $_POST, $model);
+        if ($loaded && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+//            ddump($model->errors);
             return $this->render('create', [
+                'type' => $type,
                 'model' => $model,
             ]);
         }
@@ -80,8 +91,8 @@ class TransactionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $loaded = $model->load(Yii::$app->request->post());
+        if ($loaded && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

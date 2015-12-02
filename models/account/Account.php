@@ -104,7 +104,26 @@ class Account extends \yii\db\ActiveRecord
     }
     
     public function renderFinance($sum) {
-        return sprintf($this->currency->format, $sum);
+        if ($sum >= 0) {
+            return sprintf($this->currency->format, $sum);
+        } else {
+            return '-' . sprintf($this->currency->format, -$sum);
+        }
+    }
+    
+    public function getBalance($date) {
+        if (is_null($date)) {
+            return $this->getCurrentBalance();
+        }
+        $balance = $this->getBalances()->where("date <= '$date'")->orderBy(['date' => SORT_DESC])->one();
+        if (!$balance) {
+            return $this->getCurrentBalance();
+        }
+        return $balance;
+    }
+    
+    public function getCurrentBalance() {
+        return $this->getBalances()->orderBy(['date' => SORT_DESC])->one();
     }
     
     /**

@@ -44,12 +44,61 @@ class AccountsController extends Controller {
     public function actionIndex()
     {
         $models = Account::hierarcyForUser(Yii::$app->user->getId());
+        $date = isset($_GET['date']) ? $_GET['date']  : null;
+        if (isset($_GET['date0'])) {
+            
+            $date0 = $_GET['date0'] . ' 00:00:00';
+            $date1 = date('Y-m-d 00:00:00', strtotime($_GET['date0'] . ' +1 day'));
+//ddump($date1, $date0);
+            $t = \app\models\transaction\Transaction::find()->where("date BETWEEN '$date0' AND '$date1'")->andWhere(['user_id' => 2])->all();
 
+            $incs = [];
+            $outs = [];
+
+            foreach ($t as $transaction) {
+                foreach ($transaction->transactionOutgoings as $out) {
+                    if (!isset($outs[$out->account_id])) {
+                        $outs[$out->account_id] = 0;
+                    }
+                    $outs[$out->account_id] += $out->sum;
+                }
+                foreach ($transaction->transactionIncomings as $in) {
+                    if (!isset($incs[$in->account_id])) {
+                        $incs[$in->account_id] = 0;
+                    }
+                    $incs[$in->account_id] += $in->sum;
+                }
+            }
+            dump($outs, $incs);
+
+            foreach ($models as $m) {
+                if (!$m->virtual) {
+                    if (isset($outs[$m->id]) || isset($incs[$m->id])) {
+                        echo "Balance for account {$m->title}:";
+                        echo "<br/>&nbsp;&nbsp;Date: " . $m->getBalance($_GET['date0'])->date;
+                        echo "<br/>&nbsp;&nbsp;Sum: " . $m->getBalance($_GET['date0'])->sum;
+                        echo "<br/>&nbsp;&nbsp; +" . (isset($incs[$m->id]) ? $incs[$m->id] : 0);
+                        echo "<br/>&nbsp;&nbsp; -" . (isset($outs[$m->id]) ? $outs[$m->id] : 0);
+                        echo "<br/><br/>";
+                        
+                        $b = new Balance();
+                        $b->account_id = $m->id;
+                        $b->date = date('Y-m-d', strtotime($_GET['date0'] . ' +1 day'));
+                        $b->sum = $m->getBalance($_GET['date0'])->sum 
+                                - (isset($outs[$m->id]) ? $outs[$m->id] : 0) 
+                                + (isset($incs[$m->id]) ? $incs[$m->id] : 0);
+                        $b->save();
+                    }
+                }
+            }
+            ddump(9);
+        }
 //        $searchModel = new AccountSearch();
 //        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'models' => $models,
+            'date' => $date,
         ]);
     }
 

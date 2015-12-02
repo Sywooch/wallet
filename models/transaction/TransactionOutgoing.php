@@ -25,6 +25,11 @@ class TransactionOutgoing extends \yii\db\ActiveRecord
         return "Transaction[outgoing][" . $this->id . "]";
     }
     
+    public function __construct() {
+        $this->id = '%%newid%%';
+        parent::__construct();
+    }
+    
     /**
      * @inheritdoc
      */

@@ -14,7 +14,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Transaction', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Income', ['create', 'type' => 'income'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Expense', ['create', 'type' => 'expense'], ['class' => 'btn btn-danger']) ?>
+        <?= Html::a('Transfer', ['create', 'type' => 'transfer'], ['class' => 'btn btn-warning']) ?>
     </p>
 
     <?=

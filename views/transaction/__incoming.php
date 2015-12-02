@@ -11,7 +11,10 @@ if (is_null($__ITEM)) {
 
 <li class="incoming" data-key="incoming-<?= $__ITEM->id; ?>">
     <?= $form->field($__ITEM, 'account_id')->label(false)->dropDownList(ArrayHelper::merge(["" => "Select account"], Account::plainHierarcyForUser(Yii::$app->user->getId()))); ?>
-    <?= $form->field($__ITEM, 'contractor_id')->label(false)->dropDownList(ArrayHelper::merge(["" => "Select contractor"], Contractor::dropdown(Yii::$app->user->getId()))); ?>
+    <?= $form->field($__ITEM, 'contractor_id')->label(false)->dropDownList(
+            ArrayHelper::merge(["" => "Select contractor"], Contractor::dropdown(Yii::$app->user->getId())),
+            ['style' => 'display: none;']
+        ); ?>
     <?= $form->field($__ITEM, 'sum')->label(false)->textInput(); ?>
     <div role="comment-container-incoming-<?= $__ITEM->id; ?>">
     <?php if ($__ITEM->comment) : ?>

@@ -44,7 +44,7 @@ class ContractorsController extends Controller {
     public function actionIndex()
     {
         $searchModel = new ContractorSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->user->getid());
 
         return $this->render('index', [
             'searchModel' => $searchModel,

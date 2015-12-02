@@ -28,6 +28,12 @@ class TransactionExpense extends \yii\db\ActiveRecord
     public function formName() {
         return "Transaction[expense][" . $this->id . "]";
     }
+    
+    public function __construct() {
+        $this->id = '%%newid%%';
+        parent::__construct();
+    }
+    
     /**
      * @inheritdoc
      */
@@ -42,7 +48,7 @@ class TransactionExpense extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'contractor_id', 'transaction_id', 'price', 'qty', 'sum', 'comment', 'user_id'], 'required'],
+            [['name', 'transaction_id', 'price', 'qty', 'sum', 'user_id'], 'required'],
             [['contractor_id', 'transaction_id', 'user_id'], 'integer'],
             [['price', 'qty', 'sum', 'discount'], 'number'],
             [['comment'], 'string'],

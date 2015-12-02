@@ -11,7 +11,7 @@ if (is_null($__ITEM)) {
 <li class="expense" data-key="expense-<?= $__ITEM->id; ?>">
     &nbsp;
         <div role="contractor-container-expense-<?= $__ITEM->id; ?>">
-        <?php if ($__ITEM->contractor_id && $__ITEM->contractor_id != $model->expenseContractorId) : ?>
+        <?php if ($model->type == 'transfer' || $__ITEM->contractor_id && $__ITEM->contractor_id != $model->expenseContractorId) : ?>
             <?= $form->field($__ITEM, 'contractor_id')->label(false)->dropDownList(
                     ArrayHelper::merge(["" => "Select contractor"], Contractor::dropdown(Yii::$app->user->getId())),
                     ['role' => "expense-contractor"]

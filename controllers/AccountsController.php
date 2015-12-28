@@ -79,7 +79,7 @@ class AccountsController extends Controller {
                         echo "<br/>&nbsp;&nbsp;Sum: " . $m->getBalance($_GET['date0'])->sum;
                         echo "<br/>&nbsp;&nbsp; +" . (isset($incs[$m->id]) ? $incs[$m->id] : 0);
                         echo "<br/>&nbsp;&nbsp; -" . (isset($outs[$m->id]) ? $outs[$m->id] : 0);
-                        echo "<br/><br/>";
+                        echo "<br/>";
                         
                         $b = new Balance();
                         $b->account_id = $m->id;
@@ -87,7 +87,9 @@ class AccountsController extends Controller {
                         $b->sum = $m->getBalance($_GET['date0'])->sum 
                                 - (isset($outs[$m->id]) ? $outs[$m->id] : 0) 
                                 + (isset($incs[$m->id]) ? $incs[$m->id] : 0);
-                        $b->save();
+//                        $b->save();
+                        echo $b->sum;
+                        echo "<br/><br/>";
                     }
                 }
             }

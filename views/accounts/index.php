@@ -36,10 +36,25 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <td style="padding-left: <?=15*$model->level;?>px">
                     <a href="<?= Url::toRoute(['/accounts/view', 'id' => $model->id]); ?>"><?= $model->title; ?></a>
+                    <?php if (!$model->virtual) : ?>
+                        <?php if ($model->type == 'credit') : ?>
+                            <div style="text-align: right;"><small><?= sprintf('%.2f%%', $model->percent);?></small></div>
+                        <?php endif; ?>
+                        <?php if ($model->type == 'creditcard') : ?>
+                            <div style="text-align: right;">
+                                <small><?= $model->renderFinance($model->credit_card_limit); ?>
+                                <br/><small><?= sprintf('%.2f%%', $model->percent);?></small>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </td>
                 <td>
-                    <?= ($model->getBalance($date)) ? $model->renderFinance($model->getBalance($date)->sum) : ""; ?>
-                    (<?= ($model->getBalance($date)) ? $model->getBalance($date)->date : ""; ?>)
+                    <?php if (!$model->virtual) : ?>
+                        <?= ($model->getBalance($date)) ? $model->renderFinance($model->getBalance($date)->sum) : ""; ?>
+                        (<?= ($model->getBalance($date)) ? $model->getBalance($date)->date : ""; ?>)
+                    <?php else : ?>
+                        &nbsp;
+                    <?php endif; ?>
                 </td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>

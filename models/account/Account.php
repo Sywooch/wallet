@@ -111,13 +111,18 @@ class Account extends \yii\db\ActiveRecord
         }
     }
     
+    public function getClosestfutureBalance($date) {
+        $balance = $this->getBalances()->where("date > '$date'")->orderBy(['date' => SORT_ASC])->one();
+        return $balance;
+    }
+    
     public function getBalance($date) {
         if (is_null($date)) {
             return $this->getCurrentBalance();
         }
-        $balance = $this->getBalances()->where("date <= '$date'")->orderBy(['date' => SORT_DESC])->one();
+        $balance = $this->getBalances()->where("date <= '$date' AND date > " . date('Y-m-d', strtotime('first day of this month')))->orderBy(['date' => SORT_DESC])->one();
         if (!$balance) {
-            return $this->getCurrentBalance();
+            return null;
         }
         return $balance;
     }

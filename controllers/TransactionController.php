@@ -32,6 +32,12 @@ class TransactionController extends Controller
      */
     public function actionIndex()
     {
+//        $b = new \app\models\account\Balance();
+//        $b->account_id = 41;
+//        $b->date = '2015-12-26';
+//        $b->sum = 20;
+//        $b->updateFuture(100);
+//        ddump(0);
         $query = Transaction::find()->where(['user_id' => Yii::$app->user->getId()]);
         if (isset($_GET['date'])) {
             $dt = $_GET['date'];

@@ -44,6 +44,14 @@ class Balance extends \yii\db\ActiveRecord
             [['account_id', 'date'], 'unique', 'targetAttribute' => ['account_id', 'date'], 'message' => 'The combination of Account ID and Date has already been taken.']
         ];
     }
+    
+    public function updateFuture($sum) {
+        self::updateAll(['sum' => new \yii\db\Expression("`sum` + $sum")], "date > '$this->date' AND account_id = $this->account_id");
+    }
+    
+    public function updatePast($sum) {
+        self::updateAll(['sum' => new \yii\db\Expression("`sum` + $sum")], "date < '$this->date' AND account_id = $this->account_id");
+    }
 
     /**
      * @inheritdoc

@@ -4,6 +4,7 @@ namespace app\models\transaction;
 
 use Yii;
 use app\models\account\Account;
+use app\models\account\Balance;
 /**
  * This is the model class for table "transaction_incoming".
  *
@@ -64,6 +65,40 @@ class TransactionIncoming extends \yii\db\ActiveRecord
             'comment' => 'Comment',
             'user_id' => 'User ID',
         ];
+    }
+    
+    public function save($runValidation = true, $attributeNames = null) {
+        $date = date('Y-m-d', strtotime($this->transaction->date . " +1 day"));
+        if ($this->isNewRecord) {
+            if ($date > date('Y-m-d', strtotime('first day of this month'))) {
+                $balance = $this->account->getBalance($date);
+                if ($balance->date != $date) {
+                    $balance = new Balance();
+                    $balance->date = $date;
+                    $balance->account_id = $this->account->id;
+                }
+                $balance->sum = $this->account->getBalance($date)->sum + $this->sum;
+                $balance->save();
+                $balance->updateFuture($this->sum);
+            } else {
+                // XXX: Untested!
+                $balance = $this->account->getBalance($date);
+                if (!$balance) {
+                    $balance = $this->account->getClosestFutureBalance($date);
+                }
+                if ($balance->date != $date) {
+                    $balance = new Balance();
+                    $balance->date = $date;
+                    $balance->account_id = $this->account->id;
+                }
+                $balance->sum = $this->account->getBalance($date)->sum;
+                $balance->save();
+                $balance->updatePast(-$this->sum);
+            }
+        }
+        
+        return parent::save($runValidation, $attributeNames);
+        
     }
 
     /**

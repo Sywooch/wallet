@@ -70,7 +70,7 @@ class TransactionOutgoing extends \yii\db\ActiveRecord
     public function save($runValidation = true, $attributeNames = null) {
         $date = date('Y-m-d', strtotime($this->transaction->date . " +1 day"));
         if ($this->isNewRecord) {
-            if ($date > date('Y-m-d', strtotime('first day of this month'))) {
+            if ($date >= '2015-11-01') {
                 $balance = $this->account->getBalance($date);
                 if ($balance->date != $date) {
                     $balance = new Balance();
@@ -81,7 +81,7 @@ class TransactionOutgoing extends \yii\db\ActiveRecord
                 $balance->save();
                 $balance->updateFuture(-$this->sum);
             } else {
-                // XXX: Untested!
+                // For previous records
                 $balance = $this->account->getBalance($date);
                 if (!$balance) {
                     $balance = $this->account->getClosestFutureBalance($date);
@@ -96,7 +96,21 @@ class TransactionOutgoing extends \yii\db\ActiveRecord
                 $balance->updatePast($this->sum);
             }
         } else {
-            // Double update
+            if ($date >= '2015-11-01') {
+                // Substract previos from next balances
+                // Add new to next balances
+                $balance = $this->account->getBalance($date);
+                if ($balance->date != $date) {
+                    $balance = new Balance();
+                    $balance->date = $date;
+                    $balance->account_id = $this->account->id;
+                }
+                $balance->sum = $this->account->getBalance($date)->sum - $this->sum + $this->oldAttributes['sum'];
+                $balance->save();
+                $balance->updateFuture(- $this->sum + $this->oldAttributes['sum']);
+            } else {
+                // 
+            }
         }
         return parent::save($runValidation, $attributeNames);
     }

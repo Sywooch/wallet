@@ -89,6 +89,9 @@ class Transaction extends \yii\db\ActiveRecord
     }
     
     public function save($runValidation = true, $attributeNames = null) {
+        if (!$this->isNewRecord && $this->date != $this->oldAttributes['date']) {
+            throw new Exception("Date changing not inmplemented yet");
+        }
         $return = parent::save($runValidation, $attributeNames);
         foreach ($this->expenses as $k => $expense) {
             $this->expenses[$k]->transaction_id = $this->id;
@@ -146,8 +149,11 @@ class Transaction extends \yii\db\ActiveRecord
         return join(", ", $contractors);
     }
 
-    
-        /**
+    public function delete() {
+        throw new Exception('Not implemented yet');
+    }
+
+    /**
      * @inheritdoc
      */
     public static function tableName()
